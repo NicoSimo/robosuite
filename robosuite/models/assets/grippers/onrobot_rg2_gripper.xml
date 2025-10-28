@@ -1,0 +1,81 @@
+<mujoco model="onrobot_rg2_model">
+    <asset>
+        <mesh name="rg2_gripper_base_link" file="meshes/onrobot_rg2_gripper/gripper_base_link.STL" />
+        <mesh name="rg2_gripper_finger1_finger_link" file="meshes/onrobot_rg2_gripper/gripper_finger1_finger_link.STL" />
+        <mesh name="rg2_gripper_finger1_inner_knuckle_link" file="meshes/onrobot_rg2_gripper/gripper_finger1_inner_knuckle_link.STL" />
+        <mesh name="rg2_gripper_finger1_finger_tip_link" file="meshes/onrobot_rg2_gripper/gripper_finger1_finger_tip_link.STL" />
+        <mesh name="rg2_gripper_finger2_finger_link" file="meshes/onrobot_rg2_gripper/gripper_finger2_finger_link.STL" />
+        <mesh name="rg2_gripper_finger2_inner_knuckle_link" file="meshes/onrobot_rg2_gripper/gripper_finger2_inner_knuckle_link.STL" />
+        <mesh name="rg2_gripper_finger2_finger_tip_link" file="meshes/onrobot_rg2_gripper/gripper_finger2_finger_tip_link.STL" />
+    </asset>
+
+    <tendon>
+        <!-- Coupling mechanism for synchronized finger movement -->
+        <fixed name="finger_coupling" range="-1 1" stiffness="0.5" springlength="0.001" limited="true">
+            <joint joint="finger1_joint" coef="1"/>
+            <joint joint="finger2_joint" coef="-1"/>
+        </fixed>
+    </tendon>
+
+    <actuator>
+        <position name='gripper_actuator' ctrllimited="true" kp="50" joint='finger1_joint' ctrlrange='0 0.8'/>
+    </actuator>
+
+    <worldbody>
+        <body name="rg2_gripper_base_link" pos="0 0 0" quat="1 0 0 0">
+            <site name="ft_frame" pos="0 0 0" size="0.01 0.01 0.01" rgba="1 0 0 1" type="sphere" group="1" />
+            
+            <!-- End-effector site -->
+            <body name="eef" pos="0 0 0.12" quat="0.707105 0 0 -0.707105">
+                <site name="grip_site" pos="0 0 0" size="0.01 0.01 0.01" rgba="1 0 0 0.5" type="sphere" group="1"/>
+                <site name="ee_x" pos="0.1 0 0" size="0.005 .1"  quat="0.707105  0 0.707108 0 " rgba="1 0 0 0" type="cylinder" group="1"/>
+                <site name="ee_y" pos="0 0.1 0" size="0.005 .1" quat="0.707105 0.707108 0 0" rgba="0 1 0 0" type="cylinder" group="1"/>
+                <site name="ee_z" pos="0 0 0.1" size="0.005 .1" quat="1 0 0 0" rgba="0 0 1 0" type="cylinder" group="1"/>
+                <site name="grip_site_cylinder" pos="0 0 0" size="0.005 10" rgba="0 1 0 0.3" type="cylinder" group="1"/>
+            </body>
+            
+            <inertial pos="0 0 0.05" mass="0.2" diaginertia="0.0002 0.0002 0.0001" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.5 0.5 0.5 1" name="base_visual" mesh="rg2_gripper_base_link" />
+            <geom type="mesh" group="0" rgba="0.5 0.5 0.5 1" mesh="rg2_gripper_base_link" name="base_collision" />
+            
+            <!-- Left finger (finger1) -->
+            <body name="left_finger" pos="0.025 0 0.08" quat="1 0 0 0">
+                <inertial pos="0 0 0.02" mass="0.01" diaginertia="1e-05 1e-05 1e-06" />
+                <joint name="finger1_joint" pos="0 0 0" axis="0 1 0" limited="true" range="0 0.8" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0.3 0.3 1" name="left_finger_visual" mesh="rg2_gripper_finger1_finger_link" />
+                <geom type="mesh" group="0" rgba="0.3 0.3 0.3 1" mesh="rg2_gripper_finger1_finger_link" name="left_finger_collision" solref="0.01 0.25" />
+                
+                <!-- Left finger tip -->
+                <body name="left_fingertip" pos="0 0 0.05">
+                    <inertial pos="0 0 0.01" mass="0.005" diaginertia="5e-06 5e-06 5e-07" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" name="left_fingertip_visual" mesh="rg2_gripper_finger1_finger_tip_link" />
+                    <geom type="mesh" group="0" rgba="0.1 0.1 0.1 1" mesh="rg2_gripper_finger1_finger_tip_link" name="left_fingertip_collision" solref="0.01 0.25" />
+                    <!-- Fingertip collision pad -->
+                    <geom size="0.008 0.002 0.015" pos="0 0 0.02" type="box" group="0" name="left_fingerpad_collision" />
+                </body>
+            </body>
+            
+            <!-- Right finger (finger2) -->
+            <body name="right_finger" pos="-0.025 0 0.08" quat="1 0 0 0">
+                <inertial pos="0 0 0.02" mass="0.01" diaginertia="1e-05 1e-05 1e-06" />
+                <joint name="finger2_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-0.8 0" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0.3 0.3 1" name="right_finger_visual" mesh="rg2_gripper_finger2_finger_link" />
+                <geom type="mesh" group="0" rgba="0.3 0.3 0.3 1" mesh="rg2_gripper_finger2_finger_link" name="right_finger_collision" solref="0.01 0.25" />
+                
+                <!-- Right finger tip -->
+                <body name="right_fingertip" pos="0 0 0.05">
+                    <inertial pos="0 0 0.01" mass="0.005" diaginertia="5e-06 5e-06 5e-07" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" name="right_fingertip_visual" mesh="rg2_gripper_finger2_finger_tip_link" />
+                    <geom type="mesh" group="0" rgba="0.1 0.1 0.1 1" mesh="rg2_gripper_finger2_finger_tip_link" name="right_fingertip_collision" solref="0.01 0.25" />
+                    <!-- Fingertip collision pad -->
+                    <geom size="0.008 0.002 0.015" pos="0 0 0.02" type="box" group="0" name="right_fingerpad_collision" />
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    
+    <sensor>
+        <force name="force_ee" site="ft_frame"/>
+        <torque name="torque_ee" site="ft_frame"/>
+    </sensor>
+</mujoco>
