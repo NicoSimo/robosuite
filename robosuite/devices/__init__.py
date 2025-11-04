@@ -1,6 +1,6 @@
 from .device import Device
 from .keyboard import Keyboard
-
+'''
 try:
     from .spacemouse import SpaceMouse
 except ImportError:
@@ -9,3 +9,4 @@ except ImportError:
            Only macOS is officially supported. Install the additional\n
            requirements with `pip install -r requirements-extra.txt`"""
     )
+'''

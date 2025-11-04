@@ -21,7 +21,7 @@ import time
 from collections import namedtuple
 
 import numpy as np
-
+'''
 try:
     import hid
 except ModuleNotFoundError as exc:
@@ -30,7 +30,7 @@ except ModuleNotFoundError as exc:
         "Only macOS is officially supported. Install the additional "
         "requirements with `pip install -r requirements-extra.txt`"
     ) from exc
-
+'''
 import robosuite.macros as macros
 from robosuite.devices import Device
 from robosuite.utils.transform_utils import rotation_matrix
