@@ -239,8 +239,12 @@ if __name__ == "__main__":
         from robosuite.devices import SpaceMouse
 
         device = SpaceMouse(pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity)
+    elif args.device == "xbox_controller":
+        from robosuite.devices import XboxController
+
+        device = XboxController(pos_sensitivity=args.pos_sensitivity, rot_sensitivity=args.rot_sensitivity)
     else:
-        raise Exception("Invalid device choice: choose either 'keyboard' or 'spacemouse'.")
+        raise Exception("Invalid device choice: choose either 'keyboard' or 'spacemouse' -- 'xbox_controller' in testing.")
 
     # make a new timestamped directory
     t1, t2 = str(time.time()).split(".")

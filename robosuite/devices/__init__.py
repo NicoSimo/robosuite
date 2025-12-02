@@ -1,5 +1,6 @@
 from .device import Device
 from .keyboard import Keyboard
+from .xbox import XboxController
 '''
 try:
     from .spacemouse import SpaceMouse
